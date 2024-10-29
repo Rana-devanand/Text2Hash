@@ -1,8 +1,12 @@
 import React from 'react'
+import Text2Hash from './components/Text2Hash'
 
 function App() {
   return (
-    <div>App</div>
+    <div>
+      <Text2Hash />
+    
+    </div>
   )
 }
 
