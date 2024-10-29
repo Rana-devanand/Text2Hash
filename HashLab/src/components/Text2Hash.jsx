@@ -8,22 +8,27 @@ function Text2Hash() {
     sha: "",
     data: ""
   })
+  const [hash, setHash] = useState('');
   
-  const HandleChange = (e) => {
+  const HandleChange = async (e) => {
     setValue({...value, [e.target.name]: e.target.value })
   }
-  
-  console.log(value);
-  
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/api/hashtext" , value);
-      console.log(response);
+      setHash(response.data.data);
     } catch (error) {
       console.log(error);
     }
   }
+
+  const HandleReset = () => {
+    setValue({sha: "", data: ""});
+    setHash('');
+  }
+  console.log(value);
   return (
     <>
       <div className="container-fluid bg-[#fef3c767] min-h-screen">
@@ -34,17 +39,38 @@ function Text2Hash() {
         </div>
 
         <div className="box flex justify-center items-center py-5">
-          <div className="w-full sm:w-4/5 md:w-2/3 lg:w-1/2 xl:w-2/5 h-auto mt-5 border border-blue-600 bg-[#ffc5e98a] flex flex-col rounded-lg p-5">
-          <form onSubmit={HandleSubmit}>
-               <i className="flex justify-center items-center">Secure Hash Algorithm</i>
-            <div className="block-one flex flex-col sm:flex-row justify-start sm:justify-center items-start sm:items-center gap-3 m-3">
-              <label className="font-mono w-full sm:w-auto">Block:</label>
-              <input
-                type="text"
-                className="h-10 w-full border border-zinc-400 pl-5 rounded-md outline-none bg-[#d6d5d59c]"
-                value="1"
-                disabled
-              />
+          <div className="w-full sm:w-4/5 md:w-2/3 lg:w-1/2 xl:w-2/5 h-auto border border-blue-600 bg-[#ffc5e98a] flex flex-col rounded-lg p-5">
+          <form onSubmit={HandleSubmit}  >
+               <i className="flex justify-center items-center">Secure Hash Algorithm</i> <span>Blockchain Begin with this.. </span>
+            <hr className="h-1 bg-[#7c7c7c]" />
+
+            <div className="block-one flex sm:flex-row justify-start sm:justify-center items-start sm:items-center gap-3 m-3">
+              <h1 className="pb-2">Choose Hashing Algorithm:</h1>
+              <select
+                className="h-10 w-full border border-zinc-400 pl-5 rounded-md outline-none"
+                name="sha"
+                onChange={HandleChange}
+              >
+                <option value="" selected disabled>Choose algorithm</option>
+               <optgroup label="md algorithm">
+                  <option value="md5">md5</option>
+               </optgroup>
+
+                <optgroup label="sha algorithm">
+                    <option value="sha1">sha1</option>
+                    <option value="sha224">sha224</option>
+                    <option value="sha256">sha256</option>
+                    <option value="sha256">sha256</option>
+                    <option value="sha3-256">sha3-256</option>
+                    <option value="sha3-384">sha3-384</option>
+                    <option value="sha3-512">sha3-512</option>
+                </optgroup>
+
+                  <optgroup label="ripemd algorithm">
+                    <option value="ripemd160">ripemd160</option>
+                  </optgroup>
+
+              </select>
             </div>
 
             <div className="block-one flex flex-col sm:flex-row justify-start sm:justify-center items-start sm:items-center gap-3 m-3">
@@ -54,36 +80,48 @@ function Text2Hash() {
                 className="h-10 w-full border border-zinc-400 pl-5 rounded-md outline-none italic"
                 placeholder="Enter your Nonce here... SHA Text"
                 name="sha"
-                onChange={HandleChange}
+                value={value.sha}
+                // onChange={HandleChange}
+                disabled
               />
             </div>
 
             <div className="block-one flex flex-col sm:flex-row justify-start sm:justify-center items-start sm:items-start gap-3 m-3">
               <label className="font-mono w-full sm:w-auto">Data:</label>
               <textarea
-                className="h-40 w-full border border-zinc-400 pl-5 rounded-md outline-none"
+                className="h-32 w-full border border-zinc-400 pl-5 rounded-md outline-none"
                 placeholder="Enter your Data..."
                 name="data"
+                value={value.data}
                 onChange={HandleChange}
               ></textarea>
             </div>
 
             <div className="block-one flex flex-col sm:flex-row justify-start sm:justify-center items-start sm:items-center gap-3 m-3">
               <label className="font-mono w-full sm:w-auto">Hash:</label>
-              <input
+              <textarea
                 type="text"
-                className="h-10 w-full border border-zinc-400 pl-5 rounded-md outline-none"
+                value={hash}
+                className="h-16 w-full border border-zinc-400 pl-5 rounded-md outline-none"
                 placeholder="SHA Hash data..."
                 disabled
               />
             </div>
 
-            <div className="flex justify-center sm:justify-start p-5">
+            <div className="flex  gap-2 justify-center sm:justify-start p-5">
               <button className="px-8 py-2 bg-[#0783ca] rounded-md font-semibold text-white">
                 Mine
               </button>
+
+              <button className="px-8 py-2 bg-amber-600 rounded-md font-semibold text-white"
+                  onClick={HandleReset}
+              >
+                Reset
+              </button>
+
             </div>
           </form>
+          <p>This project is shown how Blockchain is secure our data during transaction.</p>
           </div>
         </div>
       </div>
