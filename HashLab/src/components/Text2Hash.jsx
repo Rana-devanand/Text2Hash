@@ -15,6 +15,9 @@ function Text2Hash() {
     setValue({...value, [e.target.name]: e.target.value })
     HandleSubmit();
   }
+  const HandleAlgorithm = (e) => {
+    setValue({...value , sha : e.target.value})
+  }
 
   //https://text2hash.onrender.com
   const HandleSubmit = async (e) => {
@@ -54,7 +57,7 @@ function Text2Hash() {
               <select
                 className="h-10 w-full border border-zinc-400 pl-5 rounded-md outline-none"
                 name="sha"
-                onChange={HandleChange}
+                onChange={HandleAlgorithm}
               >
                 <option value="" selected disabled>Choose algorithm</option>
                <optgroup label="md algorithm">
