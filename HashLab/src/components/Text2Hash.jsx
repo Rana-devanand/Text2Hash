@@ -9,16 +9,22 @@ function Text2Hash() {
     data: ""
   })
   const [hash, setHash] = useState('');
-  
+  const [loading , setLoading] = useState(false);
+
   const HandleChange = async (e) => {
     setValue({...value, [e.target.name]: e.target.value })
+    HandleSubmit();
   }
 
+  //https://text2hash.onrender.com
   const HandleSubmit = async (e) => {
-    e.preventDefault();
+    const URL = import.meta.env.VITE_SERVER_API_URL;
+    // e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/hashtext" , value);
+      setLoading(true);
+      const response = await axios.post(`${URL}/api/hashtext` , value);
       setHash(response.data.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +34,6 @@ function Text2Hash() {
     setValue({sha: "", data: ""});
     setHash('');
   }
-  console.log(value);
   return (
     <>
       <div className="container-fluid bg-[#fef3c767] min-h-screen">
@@ -78,7 +83,7 @@ function Text2Hash() {
               <input
                 type="text"
                 className="h-10 w-full border border-zinc-400 pl-5 rounded-md outline-none italic"
-                placeholder="Enter your Nonce here... SHA Text"
+                placeholder="Your choosing algorithm"
                 name="sha"
                 value={value.sha}
                 // onChange={HandleChange}
@@ -101,7 +106,7 @@ function Text2Hash() {
               <label className="font-mono w-full sm:w-auto">Hash:</label>
               <textarea
                 type="text"
-                value={hash}
+                value={loading ? 'Hashing...' : hash}
                 className="h-16 w-full border border-zinc-400 pl-5 rounded-md outline-none"
                 placeholder="SHA Hash data..."
                 disabled
@@ -109,9 +114,9 @@ function Text2Hash() {
             </div>
 
             <div className="flex  gap-2 justify-center sm:justify-start p-5">
-              <button className="px-8 py-2 bg-[#0783ca] rounded-md font-semibold text-white">
+              {/* <button className="px-8 py-2 bg-[#0783ca] rounded-md font-semibold text-white">
                 Mine
-              </button>
+              </button> */}
 
               <button className="px-8 py-2 bg-amber-600 rounded-md font-semibold text-white"
                   onClick={HandleReset}
